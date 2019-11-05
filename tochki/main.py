@@ -1,6 +1,5 @@
 import pygame
 import sys
-import math
 
 size = width, height = 800, 600
 
@@ -10,13 +9,11 @@ black = 0, 0, 0
 def main():
     pygame.init()
     screen = pygame.display.set_mode(size)
-    dt = 0.3
+    dt = 1
     dx1, dy1 = 2, 1
     x1, y1 = 0, 0
     dx2, dy2 = -1, 5
     x2, y2 = 0, 0
-    dx3, dy3 = 3, 4
-    x3, y3 = 0, 0
     game_over = False
 
     while not game_over:
@@ -39,26 +36,24 @@ def main():
         x2 += dx2 * dt
         y2 += dy2 * dt
 
-        if x3 + width / 2 >= width or x3 + width / 2 < 0:
-            dx3 = -dx3
-        if y3 + height / 2 >= height or y3 + height / 2 < 0:
-            dy3 = -dy3
-        x3 += dx3 * dt
-        y3 += dy3 * dt
+        for sx in range(0, width, 20):
+            for sy in range(0, height, 20):
+                x4, y4 = sx - width / 2, height / 2 - sy
+                if (x2 - x1) * (x4 - x1) + (y2 - y1) * (y4 - y1) > 0:
+                    s = 155
+                else:
+                    s = 0
+                if (x2 - x1) * (y4 - y1) - (y2 - y1) * (x4 - x1) > 0:
+                    v = 155
+                else:
+                    v = 0
+                color1 = (155, s, v)
+                pygame.draw.circle(screen, color1, (int(sx), int(sy)), 3, 0)
 
-        if (x2-x1) * (x3 - x1) + (y2-y1) * (y3 - y1) > 0:
-            color1 = (155, 155, 0)
-        else:
-            color1 = (155, 0, 0)
-
-        pygame.draw.circle(screen, (128, 128, 128), (int(width / 2 - x1), int(height / 2 + y1)), 5, 0)
-        pygame.draw.circle(screen, color1, (int(width / 2 - x2), int(height / 2 + y2)), 5, 0)
-        pygame.draw.circle(screen, (0, 0, 155), (int(width / 2 - x3), int(height / 2 + y3)), 5, 0)
-        pygame.draw.line(screen, (128, 128, 128), (int(width / 2 - x1), int(height / 2 + y1)),
-                         (int(width / 2 - x2), int(height / 2 + y2)))
-        pygame.draw.line(screen, (128, 128, 128), (int(width / 2 - x1), int(height / 2 + y1)),
-                         (int(width / 2 - x3), int(height / 2 + y3)))
-
+        pygame.draw.circle(screen, (0, 155, 0), (int(width / 2 + x1), int(height / 2 - y1)), 5, 0)
+        pygame.draw.circle(screen, (155, 0, 0), (int(width / 2 + x2), int(height / 2 - y2)), 5, 0)
+        pygame.draw.line(screen, (128, 128, 128), (int(width / 2 + x1), int(height / 2 - y1)),
+                         (int(width / 2 + x2), int(height / 2 - y2)))
         pygame.display.flip()
         pygame.time.wait(10)
     sys.exit(0)
